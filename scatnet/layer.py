@@ -176,7 +176,7 @@ class Scattering:
         # same logical dimensions of input data (n_samples, 1, 2 * n_features)
         filters = self.init_filters(j, q, k, **filters_kw)
         n_filters, kernel_size = filters.get_shape().as_list()
-        filters_concat = tf.concat([tf.real(filters), tf.imag(filters)], 0)
+        filters_concat = tf.concat([tf.math.real(filters), tf.math.imag(filters)], 0)
         filters_kernel = tf.expand_dims(tf.transpose(filters_concat), 1)
 
         # Pad input in the time dimension before convolution with half the size
@@ -230,7 +230,7 @@ class Scattering:
         # [-k * 2 ** (j - 1), ..., -1, 0, 1, ..., k * 2 ** (j - 1)]
         # We change the range depending on if the extra octave was added
         time_max = np.float32(k * 2**(j - 1 + extra_octave))
-        time_grid = tf.lin_space(-time_max, time_max, self.filter_samples)
+        time_grid = tf.linspace(-time_max, time_max, self.filter_samples)
 
         # Scales
         # ------
@@ -296,9 +296,8 @@ class Scattering:
 
             # Renorm and set filter-bank
             filters_renorm = filters / tf.reduce_max(filters, 1, keepdims=True)
-            filters_fft = tf.spectral.rfft(filters_renorm)
-            filters = tf.ifft(
-                tf.concat([filters_fft, tf.zeros_like(filters_fft)], 1))
+            filters_fft = tf.signal.rfft(filters_renorm)
+            filters = tf.signal.ifft(tf.concat([filters_fft, tf.zeros_like(filters_fft)], 1))
 
         else:
 

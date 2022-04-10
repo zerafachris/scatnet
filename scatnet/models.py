@@ -8,8 +8,10 @@ This version does not learn k-means first, but takes external centroids.
 import numpy as np
 import tensorflow as tf
 
-from tensorflow.contrib.distributions import MultivariateNormalFullCovariance
-MVNFC = MultivariateNormalFullCovariance
+import tensorflow_probability as tfp
+tfd = tfp.distributions
+
+MVNFC = tfd.MultivariateNormalFullCovariance
 
 
 def gmm(mu, cov, tau, sx_proj, n_clusters=None, gmm_type='natural',
@@ -24,7 +26,7 @@ def gmm(mu, cov, tau, sx_proj, n_clusters=None, gmm_type='natural',
               for c in range(n_clusters)]
     else:
         n_clusters = cov.get_shape().as_list()[0]
-        log_tau = tf.log(tau)
+        log_tau = tf.math.log(tau)
         gm = [MVNFC(mu[c], cov[c]) for c in range(n_clusters)]
     log_p = [gm[c].log_prob(sx_proj) for c in range(n_clusters)]
     cat = tf.stack([log_tau[c] + log_p[c] for c in range(n_clusters)], 1)

@@ -34,7 +34,8 @@ data:
     load:
         decimation: 2
         file_data: ./CI.LRL..HHZ
-        trim: [2019-07-04 00:00, 2019-07-04 17:00]
+        # trim: [2019-07-04 00:00, 2019-07-04 17:00]
+        trim: [2017-06-17 12:00, 2017-06-17 23:59]
     filter:
         type: highpass
         freq: 0.1

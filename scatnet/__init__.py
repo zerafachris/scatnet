@@ -10,13 +10,13 @@ ScatNet – a deep scattering network with learnable wavelets.
 from . import io
 from . import data
 from . import display
-# from . import models
+from . import models
 from . import logtable
 from .layer import Scattering
 
 
 __all__ = [
-    # 'models',
+    'models',
     'display',
     'io',
     'logtable',
